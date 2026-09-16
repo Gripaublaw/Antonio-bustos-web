@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Antonio Bustos — sistema visual
+   Fosc, sobri, editorial. Cap animació exagerada.
+------------------------------------------------------------------ */
+
+@theme {
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #1a1a1a;
+  --color-ink-line: #2a2a2a;
+  --color-bone: #f5f5f5;
+  --color-cru: #e8e0d5;
+  --color-smoke: #666666;
+
+  --font-display: "Playfair Display", "Times New Roman", serif;
+  --font-body: "Inter", "Helvetica Neue", sans-serif;
+}
+
+:root {
+  --ab-ink: #0a0a0a;
+  --ab-ink-soft: #1a1a1a;
+  --ab-line: #2a2a2a;
+  --ab-bone: #f5f5f5;
+  --ab-cru: #e8e0d5;
+  --ab-smoke: #666666;
+
+  --ab-rule: color-mix(in oklab, var(--ab-cru) 22%, transparent);
+  --ab-gutter: clamp(1.5rem, 6vw, 7rem);
+  --ab-section: clamp(5rem, 12vh, 9.5rem);
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--ab-ink);
+}
+
+body {
+  margin: 0;
+  background-color: var(--ab-ink);
+  color: var(--ab-bone);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ab-cru);
+  color: var(--ab-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ab-cru);
+  outline-offset: 3px;
+}
+
+/* Gra de pel·lícula: dona textura al negre pla sense embrutar-lo. */
+.ab-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Filet fi reutilitzat entre seccions. */
+.ab-rule {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--ab-rule) 12%,
+    var(--ab-rule) 88%,
+    transparent
+  );
+}
+
+/* Aparició discreta a l'entrar en viewport. */
+.ab-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.ab-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .ab-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Substituts segurs per a les utilitats de text i revelat. */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes ab-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Revelat: si el navegador suporta animacions lligades al scroll, el
+ * revelat funciona sense JavaScript. En cas contrari, un script mínim
+ * afegeix `is-in` quan l'element entra en viewport (vegeu main.ts).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .ab-reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      animation: ab-reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 35%;
+    }
+  }
+}
+
