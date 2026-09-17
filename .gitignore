@@ -1,13 +1,15 @@
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+# Deno
+# https://deno.com/
 
-# Fresh build directory
-_fresh/
-# npm + other dependencies
+# Cache directory (when using project-local DENO_DIR)
+# https://docs.deno.com/runtime/fundamentals/setup/#deno_dir
+.deno/
+
+# Coverage reports
+# https://docs.deno.com/runtime/reference/cli/coverage/
+coverage/
+*.lcov
+
+# Dependències i compilats
 node_modules/
-vendor/
-
+_fresh/
